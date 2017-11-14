@@ -1,5 +1,4 @@
 //Nicolas Stoian
-//CUNY First ID: 10852790
 //CS780 Image Processing
 //Project 9.1 - K-Curvature Corner Detector
 
