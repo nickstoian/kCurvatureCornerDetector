@@ -1,0 +1,24 @@
+step 0: - open input files and output files
+	   (numRows, numCols, minVal, maxVal, label, numPts ) <- read from argv[1]
+	  - dynamically allocate boundPtAry with size of numPts
+	  - K <-- get from argv[2]
+	  - index  <-- 0  
+step 1: (x, y) <-- read from input 
+	   loadData // store x, y to boundPtAry[index]	   
+step 2: index ++; 	  
+step 3: repeat step 1 and step 2 until the file is empty
+step 4:  intiallize Q, P, and R 
+step 5: index <-- P
+	   curvature <-- computeCurvature (P, Q, R)
+        store curvature to boundPtAry[index]
+	   print Q, P, R and info (x, y, curvature) of boundPtAry[index]to argv[5]
+	  		// with proper heading. Print only one boundrary point, not the entire array
+step 6: Increment P, Q, R by 1, then mod numPts
+step 7: repeat step 5 to step 6 until P == K-1
+step 8: print the info (x, y, curvature) of the entire boundaryAry to argv[5] 
+step 9: computeLocalMaxima for all point in boundPtAry[index], index from 0 to numPts-1
+step 10: determineCorner do for all point in boundPtAry[index], index from 0 to numPts-1
+step 11: output the info (x, y, corner) of the entire boundaryAry to argv[3]
+step 12: Img <-- creat an image of size numRows by numCols
+step 13: for each boundaryAry[i], put it corner value at Img(x, y)
+step 14: prettyPrint Img
