@@ -1,0 +1,148 @@
+
+Project 9.1:  K-Curvature edge detector
+	     
+
+**************************************
+Language: C++
+
+Due date: soft copy 9.1:  4/24/2016 Sunday before Midnight
+Due date: hard copy 9.1:  5/2/2016 Monday in class
+
+*************************************
+
+I. Inputs: 
+	a) argv[1] : A text file representng the boundary points of an object in an image.
+      The file contains image header, the label of the object, then follows by 
+	the sequence of 2D boundary points {(r1,c1), (r2, c2), ....} of the object. 
+	
+	The format of the input is as follows:
+
+	#rows #cols minVal maxVal // image header
+	label	// the label of the object
+	#pts //  the number of boundary points
+	r1 c1 
+	r2 c2
+	r3 c3
+	:
+	: 
+	b) argv[2]: K // The length of neighborhood, in K-curvature computation
+
+II. Outputs: 
+	c) argv[3] -- The result of the K-curvature of the object boundary points, 
+	as a text file representng the boundary points of the object with corner indicator.
+      This output file contains image header, the label of the object, then follows by 
+	the sequence of boundary points with corner indicator {(r1,c1, m1), (r2, c2, m2), ....} of the object. 
+
+	The format of this output file is as follows:
+ 
+	#rows #cols minVal maxVal // image header
+ 	label	// the label of the object.
+	#pts //  the number of boundary points
+ 	r1 c1 1 // not a corner
+   	r2 c2 8 // a corner
+  	 	r3 c3 1 // not a corner
+  	:
+   		: 
+
+
+	b) argv[4]: - Pretty print (displaying) the result of argv[3] as in an image.
+ 
+	c) argv[5]: -- for all debugging output
+
+*******************************
+III. Data structure:
+*******************************
+- An image class
+	- numRows (int) 
+	- numCols (int)
+	- minVal (int) 
+	- maxVal (int) 	
+	- constructor
+	- prettyPrint
+
+- A boundaryPt class
+
+   	 frind of kCurvature class
+
+		- x (int)
+		- y (int)
+		- curvature (double)
+		- localMax (int)
+		- corner (int)
+
+		- constructor
+			
+- A kCurvature class
+
+  	- K  (int) // in argv[2]
+	- numPts (int)
+     - boundPtAry (boundaryPt *) // an 1D array, need to dynamically allocate
+
+	- beginIndex // set to 0
+   
+  	- Q (int) // an index of the array, initially set to 0
+	- P (int) // an index of the array, initially initially set to K
+	- R (int) // an index of the array, initially initially set to 2*K
+
+	- loadData // store (x, y) to boundPtAry at a given index
+ 	- computeCurvature
+	- computeLocalMaxima // P(i) is a local maxima iff the curvature of p(i) is >= the curvatures of 
+		// its linear neighbors: p(i-2), p(i-1), p(i+1), p(i+2)
+
+	- isCorner // p(i) is a corner (returns 8) if p(i) is a local maxima AND for all p(i-2), p(i-1), p(i+1), p(i+2)
+				// only p(i-1) or p(i+1) can be a local maxima, otherwise, p(i) is not a corner (return 1).
+			
+	- constructor
+
+		     
+*******************************
+III. Algorithms 
+*******************************
+  
+step 0: - open input files and output files
+	   (numRows, numCols, minVal, maxVal, label, numPts ) <- read from argv[1]
+
+	  - dynamically allocate boundPtAry with size of numPts
+
+	  - K <-- get from argv[2]
+	 
+	  - index  <-- 0
+ 	  
+step 1: (x, y) <-- read from input 
+	   loadData // store x, y to boundPtAry[index]
+	   
+step 2: index ++; 
+	  
+step 3: repeat step 1 and step 2 until the file is empty
+
+step 4:  intiallize Q, P, and R 
+
+step 5: index <-- P
+	   curvature <-- computeCurvature (P, Q, R)
+        store curvature to boundPtAry[index]
+	   print Q, P, R and info (x, y, curvature) of boundPtAry[index]to argv[5]
+	  		// with proper heading. Print only one boundrary point, not the entire array
+ 
+step 6: Increment P, Q, R by 1, then mod numPts
+
+step 7: repeat step 5 to step 6 until P == K-1
+
+step 8: print the info (x, y, curvature) of the entire boundaryAry to argv[5] 
+
+step 9: computeLocalMaxima for all point in boundPtAry[index], index from 0 to numPts-1
+
+step 10: determineCorner do for all point in boundPtAry[index], index from 0 to numPts-1
+
+step 11: output the info (x, y, corner) of the entire boundaryAry to argv[3]
+
+step 12: Img <-- creat an image of size numRows by numCols
+
+step 13: for each boundaryAry[i], put it corner value at Img(x, y)
+
+step 14: prettyPrint Img
+
+
+ 
+
+
+
